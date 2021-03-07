@@ -4,17 +4,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-public class MainActivity extends AppCompatActivity {
+/**
+ || fragment
+ */
+
+public class OHLCHistoryAactivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        button. onClick(
-                new handler(){
-                    ->
-                }
-        )
+        setContentView(R.layout.activity_o_h_l_c_history_aactivity);
     }
 }
