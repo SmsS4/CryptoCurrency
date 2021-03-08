@@ -1,13 +1,11 @@
-/**120*/
+/**
+ * 120
+ */
 package com.example.homework1;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-/**
- || fragment
- */
+import androidx.appcompat.app.AppCompatActivity;
 
 public class OHLCHistoryAactivity extends AppCompatActivity {
 
