@@ -3,5 +3,5 @@
  */
 package com.example.homework1;
 
-public class OHLCDataGetter {
+public class OhlcDataGetter {
 }
