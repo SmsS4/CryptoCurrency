@@ -1,13 +1,8 @@
+/**30*/
 package com.example.homework1;
 
 import java.util.logging.Handler;
 
-public class OHLCDataGetter {
-    OHLCDataGetter(String name, Handler handler){
+public class  OHLCDataGetter {
 
-    }
-    void run(){
-
-    }
-}
 }
