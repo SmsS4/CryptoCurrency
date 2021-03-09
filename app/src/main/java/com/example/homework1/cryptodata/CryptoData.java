@@ -1,6 +1,8 @@
 
 package com.example.homework1.cryptodata;
 
+import android.graphics.Bitmap;
+
 import java.util.List;
 
 
@@ -8,6 +10,17 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class CryptoData {
+
+    private Bitmap logo;
+
+    public void setLogo(Bitmap logo) {
+        this.logo = logo;
+    }
+
+    public Bitmap getLogo() {
+        return this.logo;
+    }
+
 
     @SerializedName("id")
     @Expose
