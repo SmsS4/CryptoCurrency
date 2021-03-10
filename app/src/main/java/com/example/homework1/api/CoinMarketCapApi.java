@@ -15,7 +15,7 @@ import retrofit2.Response;
 
 public class CoinMarketCapApi {
     private static Bitmap getLogo(int id) {
-        /**
+        /*
          Get logo from id
          */
 
@@ -31,8 +31,7 @@ public class CoinMarketCapApi {
             if (response.isSuccessful()) {
                 if (response.body() != null) {
                     // display the image data in a ImageView or save it
-                    Bitmap bmp = BitmapFactory.decodeStream(response.body().byteStream());
-                    return bmp;
+                    return BitmapFactory.decodeStream(response.body().byteStream());
                 }
             }
         } catch (Exception ex) {
@@ -42,8 +41,8 @@ public class CoinMarketCapApi {
     }
 
     static List<CryptoData> getData(int start, int limit) {
-        /**
-         Get data of 10 coin from start
+        /*
+         Get data of limit coin from start
          1 <= start
          */
         ApiService service = RetrofitInstance.getApi().create(ApiService.class);
@@ -51,6 +50,7 @@ public class CoinMarketCapApi {
         try {
             Response<CryptoDataList> response = call.execute();
             CryptoDataList apiResponse = response.body();
+            assert apiResponse != null;
             for (CryptoData cd : apiResponse.getData()) {
                 cd.setLogo(getLogo(cd.getId()));
             }
@@ -58,7 +58,6 @@ public class CoinMarketCapApi {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        return new ArrayList<CryptoData>();
-
+        return new ArrayList<>();
     }
 }
