@@ -3,8 +3,10 @@ package com.example.homework1.ohldata;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 
-public class Candle {
+
+public class Candle implements Serializable{
     /**
      * You probably need only price_open, price_close, price_high, price_low
      */
@@ -22,19 +24,19 @@ public class Candle {
     private String timeClose;
     @SerializedName("price_open")
     @Expose
-    private Double priceOpen;
+    private Float priceOpen;
     @SerializedName("price_high")
     @Expose
-    private Double priceHigh;
+    private Float priceHigh;
     @SerializedName("price_low")
     @Expose
-    private Double priceLow;
+    private Float priceLow;
     @SerializedName("price_close")
     @Expose
-    private Double priceClose;
+    private Float priceClose;
     @SerializedName("volume_traded")
     @Expose
-    private Double volumeTraded;
+    private Float volumeTraded;
     @SerializedName("trades_count")
     @Expose
     private Integer tradesCount;
@@ -71,43 +73,43 @@ public class Candle {
         this.timeClose = timeClose;
     }
 
-    public Double getPriceOpen() {
+    public Float getPriceOpen() {
         return priceOpen;
     }
 
-    public void setPriceOpen(Double priceOpen) {
+    public void setPriceOpen(Float priceOpen) {
         this.priceOpen = priceOpen;
     }
 
-    public Double getPriceHigh() {
+    public Float getPriceHigh() {
         return priceHigh;
     }
 
-    public void setPriceHigh(Double priceHigh) {
+    public void setPriceHigh(Float priceHigh) {
         this.priceHigh = priceHigh;
     }
 
-    public Double getPriceLow() {
+    public Float getPriceLow() {
         return priceLow;
     }
 
-    public void setPriceLow(Double priceLow) {
+    public void setPriceLow(Float priceLow) {
         this.priceLow = priceLow;
     }
 
-    public Double getPriceClose() {
+    public Float getPriceClose() {
         return priceClose;
     }
 
-    public void setPriceClose(Double priceClose) {
+    public void setPriceClose(Float priceClose) {
         this.priceClose = priceClose;
     }
 
-    public Double getVolumeTraded() {
+    public Float getVolumeTraded() {
         return volumeTraded;
     }
 
-    public void setVolumeTraded(Double volumeTraded) {
+    public void setVolumeTraded(Float volumeTraded) {
         this.volumeTraded = volumeTraded;
     }
 
