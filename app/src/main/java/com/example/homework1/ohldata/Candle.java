@@ -6,9 +6,9 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 
 
-public class Candle implements Serializable{
+public class Candle implements Serializable {
     /**
-     * You probably need only price_open, price_close, price_high, price_low
+     * Candles
      */
     @SerializedName("time_period_start")
     @Expose

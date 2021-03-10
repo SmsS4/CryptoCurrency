@@ -10,7 +10,18 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class CryptoData {
-
+    /**
+     * Response model of CoinMarketCapApi
+     * getter methods:
+         * getPrice: price base on USD
+         * getPercentChange1h
+         * getPercentChange24h
+         * getPercentChange7d
+         * getName
+         * getSymbol
+         * getLastUpdated: returns time when data is updated
+         * getLogo: Bitmap logo of crpyto
+     */
     private Bitmap logo;
 
     public void setLogo(Bitmap logo) {
@@ -87,34 +98,16 @@ public class CryptoData {
         return getQuote().getUSD().getPrice();
     }
 
-
     public Double getPercentChange1h() {
         return getQuote().getUSD().getPercentChange1h();
     }
-
 
     public Double getPercentChange24h() {
         return getQuote().getUSD().getPercentChange24h();
     }
 
-
     public Double getPercentChange7d() {
         return getQuote().getUSD().getPercentChange7d();
-    }
-
-
-    public Double getPercentChange30d() {
-        return getQuote().getUSD().getPercentChange30d();
-    }
-
-
-    public Double getPercentChange60d() {
-        return getQuote().getUSD().getPercentChange60d();
-    }
-
-
-    public Double getPercentChange90d() {
-        return getQuote().getUSD().getPercentChange90d();
     }
 
 
