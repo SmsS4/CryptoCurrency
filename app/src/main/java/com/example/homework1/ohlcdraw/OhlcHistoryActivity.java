@@ -28,50 +28,58 @@ import com.github.mikephil.charting.data.CandleEntry;
 import java.util.ArrayList;
 
 public class OhlcHistoryActivity extends AppCompatActivity {
-
     /**
-     pass OhlcData like this
-
+     * Activity to show ohlc chart
      */
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_ohlc_history_aactivity);
-        Intent i = getIntent();
-        OhlcData data = (OhlcData)i.getSerializableExtra("ohlc_data");
+    private TextView textView;
+    private OnTouchOhlc onTouchOhlc;
+    private CandleStickChart candleStickChart;
+    private OhlcData ohlcData;
 
+    private void setFields() {
+        textView = findViewById(R.id.textView);
+        onTouchOhlc = new OnTouchOhlc(textView);
+        candleStickChart = findViewById(R.id.candle_stick_chart);
+    }
+
+    private void setBackButton() {
+        /// set button to finish activity
         Button back = findViewById(R.id.back_button_ohlc);
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        back.setOnClickListener(v -> finish());
+    }
 
-        TextView textView = findViewById(R.id.textView);
-        OnTouchOhlc onTouchOhlc = new OnTouchOhlc(textView);
+    private void setData() {
+        /// get data as ohlc_data param
+        Intent i = getIntent();
+        ohlcData = (OhlcData) i.getSerializableExtra("ohlc_data");
+    }
 
-        ArrayList<CandleEntry> yValsCandleStick= new ArrayList<CandleEntry>();
+    private ArrayList<CandleEntry> getCandles() {
+        ArrayList<CandleEntry> yValsCandleStick = new ArrayList<CandleEntry>();
         int idx = 0;
-        for(Candle candle: data.getCandles()) {
+        for (Candle candle : ohlcData.getCandles()) {
             yValsCandleStick.add(new CryptoCandleEntry(idx, candle.getPriceHigh(), candle.getPriceLow(), candle.getPriceOpen(), candle.getPriceClose()));
             idx += 1;
         }
+        return yValsCandleStick;
+    }
 
-        CandleStickChart candleStickChart = findViewById(R.id.candle_stick_chart);
+    private void setCandleStickChartConfig() {
         candleStickChart.setHighlightPerDragEnabled(true);
         candleStickChart.setDrawBorders(true);
         candleStickChart.setTouchEnabled(true);
         candleStickChart.setBorderColor(Color.rgb(221, 221, 221));
         candleStickChart.setNoDataText("There is no candle");
-
         candleStickChart.setMarker(onTouchOhlc);
+        candleStickChart.requestDisallowInterceptTouchEvent(true);
+        candleStickChart.getLegend().setEnabled(false);
+    }
 
+    private void setAxisConfig() {
         YAxis yAxis = candleStickChart.getAxisLeft();
         YAxis rightAxis = candleStickChart.getAxisRight();
         yAxis.setDrawGridLines(false);
         rightAxis.setDrawGridLines(false);
-        candleStickChart.requestDisallowInterceptTouchEvent(true);
         XAxis xAxis = candleStickChart.getXAxis();
         xAxis.setDrawGridLines(false);// disable x axis grid lines
         xAxis.setDrawLabels(false);
@@ -80,11 +88,10 @@ public class OhlcHistoryActivity extends AppCompatActivity {
         xAxis.setGranularity(1f);
         xAxis.setGranularityEnabled(true);
         xAxis.setAvoidFirstLastClipping(true);
+    }
 
-        Legend l = candleStickChart.getLegend();
-        l.setEnabled(false);
-
-        CandleDataSet set1 = new CandleDataSet(yValsCandleStick, "DataSet 1");
+    private void setCandleDataSet(ArrayList<CandleEntry> candles) {
+        CandleDataSet set1 = new CandleDataSet(candles, "DataSet 1");
         set1.setAxisDependency(YAxis.AxisDependency.LEFT);
         set1.setColor(Color.rgb(80, 80, 80));
         set1.setShadowColor(Color.rgb(192, 192, 192));
@@ -95,11 +102,19 @@ public class OhlcHistoryActivity extends AppCompatActivity {
         set1.setIncreasingPaintStyle(Paint.Style.FILL);
         set1.setNeutralColor(Color.BLUE);
         set1.setDrawValues(false);
+        candleStickChart.setData(new CandleData(set1));
+    }
 
-        CandleData cd = new CandleData(set1);
-        candleStickChart.setData(cd);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_ohlc_history_aactivity);
+        setFields();
+        setData();
+        setBackButton();
+        setCandleStickChartConfig();
+        setAxisConfig();
+        setCandleDataSet(getCandles());
         candleStickChart.invalidate();
-
-
     }
 }

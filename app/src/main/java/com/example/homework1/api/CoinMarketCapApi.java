@@ -16,7 +16,7 @@ import retrofit2.Response;
 public class CoinMarketCapApi {
     static private int LIMIT = 10;
 
-    static Bitmap getLogo(int id) {
+    private static Bitmap getLogo(int id) {
         /**
          Get logo from id
          */
@@ -30,19 +30,13 @@ public class CoinMarketCapApi {
 
         try {
             Response<ResponseBody> response = call.execute();
-
             if (response.isSuccessful()) {
                 if (response.body() != null) {
                     // display the image data in a ImageView or save it
                     Bitmap bmp = BitmapFactory.decodeStream(response.body().byteStream());
                     return bmp;
-                } else {
-                    System.out.println("oh no 1");
                 }
-            } else {
-                System.out.println("oh no 2");
             }
-
         } catch (Exception ex) {
             ex.printStackTrace();
         }

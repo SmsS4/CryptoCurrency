@@ -6,7 +6,9 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class CryptoDataList {
-
+    /**
+     * list of 10 CryptoData
+     */
     @SerializedName("data")
     @Expose
     private List<CryptoData> data;
