@@ -2,9 +2,10 @@ package com.example.homework1.ohldata;
 
 import com.example.homework1.ohldata.Candle;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class OhlcData {
+public class OhlcData implements Serializable {
     List<Candle> candles;
 
     public OhlcData(List<Candle> candles) {

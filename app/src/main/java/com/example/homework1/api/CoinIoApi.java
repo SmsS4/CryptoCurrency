@@ -29,7 +29,7 @@ public class CoinIoApi {
 
     static private String TIME_FRAME = "1DAY";
 
-    static OhlcData getOhlcData(String id, TimeStart timeStart) {
+    public static OhlcData getOhlcData(String id, TimeStart timeStart) {
         /**
          id is CryptoData.symbol
          */
