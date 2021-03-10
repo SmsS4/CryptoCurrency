@@ -14,8 +14,6 @@ import retrofit2.Call;
 import retrofit2.Response;
 
 public class CoinMarketCapApi {
-    static private int LIMIT = 10;
-
     private static Bitmap getLogo(int id) {
         /**
          Get logo from id
@@ -43,13 +41,13 @@ public class CoinMarketCapApi {
         return null;
     }
 
-    static List<CryptoData> getData(int start) {
+    static List<CryptoData> getData(int start, int limit) {
         /**
          Get data of 10 coin from start
          1 <= start
          */
         ApiService service = RetrofitInstance.getApi().create(ApiService.class);
-        Call<CryptoDataList> call = service.getCryptoData(start, CoinMarketCapApi.LIMIT);
+        Call<CryptoDataList> call = service.getCryptoData(start, limit);
         try {
             Response<CryptoDataList> response = call.execute();
             CryptoDataList apiResponse = response.body();
