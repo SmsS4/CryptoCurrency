@@ -16,6 +16,7 @@ import com.example.homework1.ohlcdraw.OhlcHistoryActivity;
 import com.example.homework1.ohldata.OhlcData;
 
 public class MainActivity extends AppCompatActivity {
+    public static final int MESSAGE_UPDATE_ROW = 1;
 
     protected void ShowOhlcChart(OhlcData d) {
         /**

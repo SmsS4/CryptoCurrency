@@ -27,10 +27,10 @@ public class CoinIoApi {
         return dateFormat.format(cal.getTime());
     }
 
-    static private String TIME_FRAME = "1DAY";
+    static private final String TIME_FRAME = "1DAY";
 
     public static OhlcData getOhlcData(String id, TimeStart timeStart) {
-        /**
+        /*
          id is CryptoData.symbol
          */
 

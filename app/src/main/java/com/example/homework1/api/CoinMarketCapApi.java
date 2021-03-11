@@ -40,7 +40,7 @@ public class CoinMarketCapApi {
         return null;
     }
 
-    static List<CryptoData> getData(int start, int limit) {
+    public static List<CryptoData> getData(int start, int limit) {
         /*
          Get data of limit coin from start
          1 <= start
