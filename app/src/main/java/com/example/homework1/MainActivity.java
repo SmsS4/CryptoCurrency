@@ -1,6 +1,3 @@
-/**
- * 180
- */
 package com.example.homework1;
 
 import android.Manifest;
@@ -19,9 +16,9 @@ public class MainActivity extends AppCompatActivity {
     public static final int MESSAGE_UPDATE_ROW = 1;
 
     protected void ShowOhlcChart(OhlcData d) {
-        /**
+        /*
          Change activity to OhlcChart
-         * */
+         */
         Intent intent = new Intent(MainActivity.this, OhlcHistoryActivity.class);
         Bundle b = new Bundle();
         intent.putExtra("ohlc_data", d); //Your id

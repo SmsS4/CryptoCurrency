@@ -1,13 +1,9 @@
-/**
- * 120
- */
 package com.example.homework1.ohlcdraw;
 
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -17,8 +13,6 @@ import com.example.homework1.R;
 import com.example.homework1.ohldata.Candle;
 import com.example.homework1.ohldata.OhlcData;
 import com.github.mikephil.charting.charts.CandleStickChart;
-import com.github.mikephil.charting.components.Description;
-import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.CandleData;
@@ -28,7 +22,9 @@ import com.github.mikephil.charting.data.CandleEntry;
 import java.util.ArrayList;
 
 public class OhlcHistoryActivity extends AppCompatActivity {
-    /**
+    public static final int MESSAGE_TRANSFER_OHLC_DATA = 1;
+
+    /*
      * Activity to show ohlc chart
      */
     private TextView textView;
@@ -55,7 +51,7 @@ public class OhlcHistoryActivity extends AppCompatActivity {
     }
 
     private ArrayList<CandleEntry> getCandles() {
-        ArrayList<CandleEntry> yValsCandleStick = new ArrayList<CandleEntry>();
+        ArrayList<CandleEntry> yValsCandleStick = new ArrayList<>();
         int idx = 0;
         for (Candle candle : ohlcData.getCandles()) {
             yValsCandleStick.add(new CryptoCandleEntry(idx, candle.getPriceHigh(), candle.getPriceLow(), candle.getPriceOpen(), candle.getPriceClose()));
