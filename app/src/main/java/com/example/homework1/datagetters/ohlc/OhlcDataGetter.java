@@ -23,7 +23,7 @@ public class OhlcDataGetter implements Runnable {
         OhlcData ohlcData = CoinIoApi.getOhlcData(coin, length);
         Message msg = new Message();
         msg.what = OhlcHistoryActivity.MESSAGE_TRANSFER_OHLC_DATA;
-        msg.obj = new UpdateOhlcDataObj(ohlcData);
+        msg.obj = new UpdateOhlcDataObj(ohlcData, true);
         handler.handleMessage(msg);
     }
 }
