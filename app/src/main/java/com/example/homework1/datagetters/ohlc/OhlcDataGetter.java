@@ -8,22 +8,49 @@ import com.example.homework1.api.CoinIoApi;
 import com.example.homework1.ohlcdraw.OhlcHistoryActivity;
 import com.example.homework1.ohldata.OhlcData;
 
+import java.io.File;
+
 public class OhlcDataGetter implements Runnable {
     private final Handler handler;
     private final String coin;
     private final TimeStart length;
+    private final OhlcDataStorage storage;
 
-    public OhlcDataGetter(Handler handler, String coin, TimeStart timeStart) {
+    /**
+     * @param handler   the handler which the messages will be send to
+     * @param coin      short name of the coin, e.g. "BTC"
+     * @param timeStart WEEK or MONTH; better to set
+     * @param filesDir  files directory of the storage, set to `filesDir()` in the activities
+     */
+    public OhlcDataGetter(Handler handler, String coin, TimeStart timeStart, File filesDir) {
         this.handler = handler;
         this.coin = coin;
         this.length = timeStart;
+        this.storage = new OhlcDataStorage(filesDir);
     }
 
+    /**
+     * The main function of the thread
+     */
     public void run() {
-        OhlcData ohlcData = CoinIoApi.getOhlcData(coin, length);
+        OhlcData ohlcData = storage.loadData(this.coin);
+        if (ohlcData != null)
+            sendMessage(ohlcData, false);
+        ohlcData = CoinIoApi.getOhlcData(coin, length);
+        sendMessage(ohlcData, true);
+        storage.storeData(coin, ohlcData);
+    }
+
+    /**
+     * Sends an update to the handler
+     *
+     * @param data  the data that will be sent
+     * @param fresh shows whether the data's been cached or it's received from the network
+     */
+    private void sendMessage(OhlcData data, boolean fresh) {
         Message msg = new Message();
         msg.what = OhlcHistoryActivity.MESSAGE_TRANSFER_OHLC_DATA;
-        msg.obj = new UpdateOhlcDataObj(ohlcData, true);
+        msg.obj = new UpdateOhlcDataObj(data, fresh);
         handler.handleMessage(msg);
     }
 }
