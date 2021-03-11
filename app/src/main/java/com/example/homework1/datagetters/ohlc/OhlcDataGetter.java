@@ -33,12 +33,12 @@ public class OhlcDataGetter implements Runnable {
      * The main function of the thread
      */
     public void run() {
-        OhlcData ohlcData = storage.loadData(this.coin);
+        OhlcData ohlcData = storage.loadData(coin, length);
         if (ohlcData != null)
             sendMessage(ohlcData, false);
         ohlcData = CoinIoApi.getOhlcData(coin, length);
         sendMessage(ohlcData, true);
-        storage.storeData(coin, ohlcData);
+        storage.storeData(coin, length, ohlcData);
     }
 
     /**
@@ -50,7 +50,7 @@ public class OhlcDataGetter implements Runnable {
     private void sendMessage(OhlcData data, boolean fresh) {
         Message msg = new Message();
         msg.what = OhlcHistoryActivity.MESSAGE_TRANSFER_OHLC_DATA;
-        msg.obj = new UpdateOhlcDataObj(data, fresh);
+        msg.obj = new UpdateOhlcDataObj(coin, length, data, fresh);
         handler.handleMessage(msg);
     }
 }

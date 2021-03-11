@@ -2,6 +2,7 @@ package com.example.homework1.datagetters.ohlc;
 
 import android.util.Log;
 
+import com.example.homework1.TimeStart;
 import com.example.homework1.ohldata.OhlcData;
 import com.google.gson.Gson;
 
@@ -27,14 +28,14 @@ public class OhlcDataStorage {
                 Log.e("Storage", "Could not create OHLC storage directory.");
     }
 
-    private String getCoinFileAddress(String coin) {
-        return String.format("%s/%s.json", directory.getAbsolutePath(), coin);
+    private String getCoinFileAddress(String coin, TimeStart length) {
+        return String.format("%s/%s_%s.json", directory.getAbsolutePath(), coin, length);
     }
 
-    public void storeData(String coin, OhlcData data) {
+    public void storeData(String coin, TimeStart length, OhlcData data) {
         Gson gson = new Gson();
         String jsonData = gson.toJson(data);
-        String coinFileAddress = getCoinFileAddress(coin);
+        String coinFileAddress = getCoinFileAddress(coin, length);
         synchronized (storageLock) {
             try {
                 BufferedWriter writer = new BufferedWriter(new FileWriter(coinFileAddress));
@@ -46,17 +47,17 @@ public class OhlcDataStorage {
         }
     }
 
-    private boolean hasData(String coin) {
-        File file = new File(getCoinFileAddress(coin));
+    private boolean hasData(String coin, TimeStart length) {
+        File file = new File(getCoinFileAddress(coin, length));
         return file.exists();
     }
 
-    public OhlcData loadData(String coin) {
+    public OhlcData loadData(String coin, TimeStart length) {
         synchronized (storageLock) {
-            if (!hasData(coin))
+            if (!hasData(coin, length))
                 return null;
             try {
-                BufferedReader reader = new BufferedReader(new FileReader(getCoinFileAddress(coin)));
+                BufferedReader reader = new BufferedReader(new FileReader(getCoinFileAddress(coin, length)));
                 String jsonData = reader.readLine();
                 Gson gson = new Gson();
                 return gson.fromJson(jsonData, OhlcData.class);
