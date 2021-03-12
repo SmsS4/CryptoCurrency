@@ -1,10 +1,6 @@
-
 package com.example.homework1.cryptodata;
 
 import android.graphics.Bitmap;
-
-import java.util.List;
-
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -12,46 +8,40 @@ import com.google.gson.annotations.SerializedName;
 public class CryptoData {
     /**
      * Response model of CoinMarketCapApi
-     * getter methods:
-         * getPrice: price base on USD
-         * getPercentChange1h
-         * getPercentChange24h
-         * getPercentChange7d
-         * getName
-         * getSymbol
-         * getLastUpdated: returns time when data is updated
-         * getLogo: Bitmap logo of crpyto
+     * Getter Methods:
+     * + getPrice: price base on USD
+     * + getPercentChange1h
+     * + getPercentChange24h
+     * + getPercentChange7d
+     * + getName
+     * + getSymbol
+     * + getLastUpdated: returns time when data is updated
+     * + getLogo: Bitmap logo of crpyto
      */
     private Bitmap logo;
-
-    public void setLogo(Bitmap logo) {
-        this.logo = logo;
-    }
+    @SerializedName("id")
+    @Expose
+    private Integer id;
+    @SerializedName("name")
+    @Expose
+    private String name;
+    @SerializedName("symbol")
+    @Expose
+    private String symbol;
+    @SerializedName("last_updated")
+    @Expose
+    private String lastUpdated;
+    @SerializedName("quote")
+    @Expose
+    private Quote quote;
 
     public Bitmap getLogo() {
         return this.logo;
     }
 
-
-    @SerializedName("id")
-    @Expose
-    private Integer id;
-
-    @SerializedName("name")
-    @Expose
-    private String name;
-
-    @SerializedName("symbol")
-    @Expose
-    private String symbol;
-
-    @SerializedName("last_updated")
-    @Expose
-    private String lastUpdated;
-
-    @SerializedName("quote")
-    @Expose
-    private Quote quote;
+    public void setLogo(Bitmap logo) {
+        this.logo = logo;
+    }
 
     public Integer getId() {
         return id;
@@ -93,7 +83,6 @@ public class CryptoData {
         this.quote = quote;
     }
 
-
     public Double getPrice() {
         return getQuote().getUSD().getPrice();
     }
@@ -109,6 +98,4 @@ public class CryptoData {
     public Double getPercentChange7d() {
         return getQuote().getUSD().getPercentChange7d();
     }
-
-
 }
