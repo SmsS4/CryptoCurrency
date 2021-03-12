@@ -1,6 +1,3 @@
-/**
- * 180
- */
 package com.example.homework1;
 
 import android.Manifest;
@@ -16,14 +13,14 @@ import com.example.homework1.ohlcdraw.OhlcHistoryActivity;
 import com.example.homework1.ohldata.OhlcData;
 
 public class MainActivity extends AppCompatActivity {
+    public static final int MESSAGE_UPDATE_ROW = 1;
 
-    protected void ShowOhlcChart(OhlcData d) {
-        /**
+    protected void ShowOhlcChart(String coin) {
+        /*
          Change activity to OhlcChart
-         * */
+         */
         Intent intent = new Intent(MainActivity.this, OhlcHistoryActivity.class);
-        Bundle b = new Bundle();
-        intent.putExtra("ohlc_data", d); //Your id
+        intent.putExtra("id", coin);
         startActivity(intent);
         // finish();
     }
@@ -47,8 +44,8 @@ public class MainActivity extends AppCompatActivity {
                 1);
 
 
-        OhlcData d = CoinIoApi.getOhlcData("BTC", TimeStart.MONTH);
-        ShowOhlcChart(d);
-        ShowOhlcChart(d);
+//        OhlcData d = CoinIoApi.getOhlcData("BTC", TimeStart.MONTH);
+        ShowOhlcChart("BTC");
+        ShowOhlcChart("BTC");
     }
 }

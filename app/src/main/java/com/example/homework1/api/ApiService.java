@@ -1,9 +1,8 @@
 package com.example.homework1.api;
 
 
-
-import com.example.homework1.ohldata.Candle;
 import com.example.homework1.cryptodata.CryptoDataList;
+import com.example.homework1.ohldata.Candle;
 
 import java.util.List;
 
