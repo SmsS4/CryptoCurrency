@@ -14,7 +14,7 @@ import retrofit2.Call;
 import retrofit2.Response;
 
 public class CoinMarketCapApi {
-    private static Bitmap getLogo(int id) {
+    public static Bitmap getLogo(int id) {
         /*
          Get logo from id
          */
@@ -49,9 +49,6 @@ public class CoinMarketCapApi {
         Call<CryptoDataList> call = service.getCryptoData(start, limit);
         Response<CryptoDataList> response = call.execute();
         CryptoDataList apiResponse = response.body();
-        for (CryptoData cd : apiResponse.getData()) {
-            cd.setLogo(getLogo(cd.getId()));
-        }
         return apiResponse.getData();
     }
 }

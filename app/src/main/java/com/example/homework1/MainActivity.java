@@ -58,11 +58,10 @@ public class MainActivity extends AppCompatActivity {
 //        coinsListLayoutManager = new LinearLayoutManager(this);
 //        coinsListView.setLayoutManager(coinsListLayoutManager);
 //
-//        coinsListAdapter = new CoinsListAdapter(coinsList);
+//        coinsListAdapter = new CoinsListAdapter(coinsList, getFilesDir());
 //        coinsListView.setAdapter(coinsListAdapter);
 
 //        OhlcData d = CoinIoApi.getOhlcData("BTC", TimeStart.MONTH);
-        ShowOhlcChart("BTC");
         ShowOhlcChart("BTC");
     }
 }

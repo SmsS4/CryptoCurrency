@@ -18,7 +18,6 @@ public class CryptoData {
      * + getLastUpdated: returns time when data is updated
      * + getLogo: Bitmap logo of crpyto
      */
-    private Bitmap logo;
     @SerializedName("id")
     @Expose
     private Integer id;
@@ -34,14 +33,6 @@ public class CryptoData {
     @SerializedName("quote")
     @Expose
     private Quote quote;
-
-    public Bitmap getLogo() {
-        return this.logo;
-    }
-
-    public void setLogo(Bitmap logo) {
-        this.logo = logo;
-    }
 
     public Integer getId() {
         return id;

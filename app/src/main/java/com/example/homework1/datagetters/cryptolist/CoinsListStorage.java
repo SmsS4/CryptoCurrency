@@ -24,7 +24,7 @@ public class CoinsListStorage {
         this.directory = new File(root, COINS_LIST_DIR_NAME);
         synchronized (storageLock) {
             if (!directory.exists() && !directory.mkdir())
-                Log.e("Storage", "Could not create OHLC storage directory.");
+                Log.e("Storage", "Could not create coins list storage directory.");
         }
     }
 

@@ -15,12 +15,14 @@ public class CoinsListGetter implements Runnable {
     private final Handler handler;
     private final int startIdx, limit;
     private final CoinsListStorage storage;
+    private final CoinAvatarsStorage avatarsStorage;
 
     CoinsListGetter(Handler handler, int start, int limit, File filesDir) {
         this.handler = handler;
         this.startIdx = start;
         this.limit = limit;
         this.storage = new CoinsListStorage(filesDir);
+        this.avatarsStorage = new CoinAvatarsStorage(filesDir);
     }
 
     @Override
@@ -28,11 +30,13 @@ public class CoinsListGetter implements Runnable {
         List<CryptoData> cryptoList = readFromStorage();
         if (!cryptoList.isEmpty())
             sendMessage(cryptoList, false);
-        try{
+        try {
             cryptoList = CoinMarketCapApi.getData(this.startIdx, this.limit);
+            for (CryptoData crypto : cryptoList)
+                avatarsStorage.loadAvatar(crypto.getId());
             sendMessage(cryptoList, true);
             writeToStorage(cryptoList);
-        }catch (Exception e){
+        } catch (Exception e) {
             /// network/too many requests error
         }
     }

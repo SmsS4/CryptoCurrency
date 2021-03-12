@@ -1,23 +1,30 @@
 package com.example.homework1;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.homework1.cryptodata.CryptoData;
+import com.example.homework1.datagetters.cryptolist.CoinAvatarsStorage;
 
+import java.io.File;
 import java.util.List;
 import java.util.Locale;
 
 public class CoinsListAdapter extends RecyclerView.Adapter<CoinsListAdapter.ViewHolder> {
     private final List<CryptoData> dataSet;
+    private final CoinAvatarsStorage picsStorage;
 
-    public CoinsListAdapter(List<CryptoData> dataSet) {
+    public CoinsListAdapter(List<CryptoData> dataSet, File filesDir) {
         this.dataSet = dataSet;
+        this.picsStorage = new CoinAvatarsStorage(filesDir);
     }
 
     @NonNull
@@ -25,7 +32,7 @@ public class CoinsListAdapter extends RecyclerView.Adapter<CoinsListAdapter.View
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.crypto_row_item, parent, false);
-        return new ViewHolder(view);
+        return new ViewHolder(view, picsStorage, parent.getContext());
     }
 
     @Override
@@ -40,15 +47,21 @@ public class CoinsListAdapter extends RecyclerView.Adapter<CoinsListAdapter.View
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView name, symbol, price, hourlyDiff, dailyDiff, weeklyDiff;
+        private final ImageView coinAvatar;
+        private final Context context;
+        private final CoinAvatarsStorage picsStorage;
 
-        public ViewHolder(@NonNull View itemView) {
+        public ViewHolder(@NonNull View itemView, CoinAvatarsStorage picsStorage, Context context) {
             super(itemView);
-            name = (TextView) itemView.findViewById(R.id.name);
-            symbol = (TextView) itemView.findViewById(R.id.symbol);
-            price = (TextView) itemView.findViewById(R.id.price);
-            hourlyDiff = (TextView) itemView.findViewById(R.id.hourly_diff);
-            dailyDiff = (TextView) itemView.findViewById(R.id.daily_diff);
-            weeklyDiff = (TextView) itemView.findViewById(R.id.weekly_diff);
+            name = itemView.findViewById(R.id.name);
+            symbol = itemView.findViewById(R.id.symbol);
+            price = itemView.findViewById(R.id.price);
+            hourlyDiff = itemView.findViewById(R.id.hourly_diff);
+            dailyDiff = itemView.findViewById(R.id.daily_diff);
+            weeklyDiff = itemView.findViewById(R.id.weekly_diff);
+            coinAvatar = itemView.findViewById(R.id.coin_avatar);
+            this.context = context;
+            this.picsStorage = picsStorage;
         }
 
         public void updateFields(CryptoData data) {
@@ -62,6 +75,8 @@ public class CoinsListAdapter extends RecyclerView.Adapter<CoinsListAdapter.View
                     formatDiffPercent(data.getPercentChange24h())));
             weeklyDiff.setText(String.format(Locale.getDefault(), "7 Days: %s",
                     formatDiffPercent(data.getPercentChange7d())));
+
+            Glide.with(context).load(picsStorage.loadAvatar(data.getId())).into(coinAvatar);
         }
 
         private String formatDiffPercent(Double value) {
