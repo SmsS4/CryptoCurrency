@@ -28,10 +28,13 @@ public class CoinsListGetter implements Runnable {
         List<CryptoData> cryptoList = readFromStorage();
         if (!cryptoList.isEmpty())
             sendMessage(cryptoList, false);
-
-        cryptoList = CoinMarketCapApi.getData(this.startIdx, this.limit);
-        sendMessage(cryptoList, true);
-        writeToStorage(cryptoList);
+        try{
+            cryptoList = CoinMarketCapApi.getData(this.startIdx, this.limit);
+            sendMessage(cryptoList, true);
+            writeToStorage(cryptoList);
+        }catch (Exception e){
+            /// network/too many requests error
+        }
     }
 
     private List<CryptoData> readFromStorage() {

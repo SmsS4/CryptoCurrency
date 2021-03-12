@@ -40,24 +40,18 @@ public class CoinMarketCapApi {
         return null;
     }
 
-    public static List<CryptoData> getData(int start, int limit) {
+    public static List<CryptoData> getData(int start, int limit) throws Exception {
         /*
          Get data of limit coin from start
          1 <= start
          */
         ApiService service = RetrofitInstance.getApi().create(ApiService.class);
         Call<CryptoDataList> call = service.getCryptoData(start, limit);
-        try {
-            Response<CryptoDataList> response = call.execute();
-            CryptoDataList apiResponse = response.body();
-            assert apiResponse != null;
-            for (CryptoData cd : apiResponse.getData()) {
-                cd.setLogo(getLogo(cd.getId()));
-            }
-            return apiResponse.getData();
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        Response<CryptoDataList> response = call.execute();
+        CryptoDataList apiResponse = response.body();
+        for (CryptoData cd : apiResponse.getData()) {
+            cd.setLogo(getLogo(cd.getId()));
         }
-        return new ArrayList<>();
+        return apiResponse.getData();
     }
 }

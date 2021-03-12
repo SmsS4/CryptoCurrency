@@ -36,9 +36,14 @@ public class OhlcDataGetter implements Runnable {
         OhlcData ohlcData = storage.loadData(coin, length);
         if (ohlcData != null)
             sendMessage(ohlcData, false);
-        ohlcData = CoinIoApi.getOhlcData(coin, length);
-        sendMessage(ohlcData, true);
-        storage.storeData(coin, length, ohlcData);
+        try{
+            ohlcData = CoinIoApi.getOhlcData(coin, length);
+            sendMessage(ohlcData, true);
+            storage.storeData(coin, length, ohlcData);
+        }catch (Exception e) {
+            System.out.println("neterr");
+            /// network error
+        }
     }
 
     /**

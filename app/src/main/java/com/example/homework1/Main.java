@@ -14,15 +14,15 @@ public class Main {
 //        System.out.println(d.getCandles().size());
 //        System.out.println(d.getCandles().get(0).getPriceClose());
 
-        OhlcData d = CoinIoApi.getOhlcData("BTC", TimeStart.MONTH);
-        System.out.println("fuck you");
-        if(d==null){
-            System.out.println("shit it's null");;
-
-        }else{
-            if (d.getCandles() == null){
-                System.out.println("shit get candles is null");
-            }
-        }
+//        OhlcData d = CoinIoApi.getOhlcData("BTC", TimeStart.MONTH);
+//        System.out.println("fuck you");
+//        if(d==null){
+//            System.out.println("shit it's null");;
+//
+//        }else{
+//            if (d.getCandles() == null){
+//                System.out.println("shit get candles is null");
+//            }
+//        }
     }
 }
