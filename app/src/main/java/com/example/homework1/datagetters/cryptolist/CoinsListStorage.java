@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.util.Locale;
 
 public class CoinsListStorage {
-    private static final String COINS_LIST_DIR_NAME = "ohlc";
+    private static final String COINS_LIST_DIR_NAME = "coins_list";
     private static final Object storageLock = new Object();
 
     private final File directory;
