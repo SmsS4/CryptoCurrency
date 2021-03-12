@@ -7,28 +7,55 @@ import com.example.homework1.MainActivity;
 import com.example.homework1.api.CoinMarketCapApi;
 import com.example.homework1.cryptodata.CryptoData;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CoinsListGetter implements Runnable {
     private final Handler handler;
     private final int startIdx, limit;
+    private final CoinsListStorage storage;
 
-    CoinsListGetter(int start, int limit, Handler handler) {
+    CoinsListGetter(Handler handler, int start, int limit, File filesDir) {
         this.handler = handler;
         this.startIdx = start;
         this.limit = limit;
+        this.storage = new CoinsListStorage(filesDir);
     }
 
     @Override
     public void run() {
+        List<CryptoData> cryptoList = readFromStorage();
+        if (!cryptoList.isEmpty())
+            sendMessage(cryptoList, false);
         try{
-            List<CryptoData> cryptoList = CoinMarketCapApi.getData(this.startIdx, this.limit);
-            Message msg = new Message();
-            msg.what = MainActivity.MESSAGE_UPDATE_ROW;
-            msg.obj = new UpdateCoinsListObj(cryptoList, this.startIdx, this.limit, true);
-            handler.handleMessage(msg);
+            cryptoList = CoinMarketCapApi.getData(this.startIdx, this.limit);
+            sendMessage(cryptoList, true);
+            writeToStorage(cryptoList);
         }catch (Exception e){
-            /// network error
+            /// network/too many requests error
         }
+    }
+
+    private List<CryptoData> readFromStorage() {
+        List<CryptoData> cryptoList = new ArrayList<>();
+        for (int idx = 0; idx < limit; idx++) {
+            CryptoData idxRow = storage.loadData(startIdx + idx);
+            if (idxRow != null)
+                cryptoList.add(idxRow);
+        }
+        return cryptoList;
+    }
+
+    private void writeToStorage(List<CryptoData> cryptoList) {
+        for (int idx = 0; idx < cryptoList.size(); idx++)
+            storage.storeData(startIdx + idx, cryptoList.get(idx));
+    }
+
+    private void sendMessage(List<CryptoData> data, boolean fresh) {
+        Message msg = new Message();
+        msg.what = MainActivity.MESSAGE_UPDATE_ROW;
+        msg.obj = new UpdateCoinsListObj(data, this.startIdx, this.limit, true);
+        handler.handleMessage(msg);
     }
 }

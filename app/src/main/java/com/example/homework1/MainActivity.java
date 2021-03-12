@@ -32,8 +32,7 @@ public class MainActivity extends AppCompatActivity {
         /*
         Next lines are for network permisions. don't delete it
         */
-        if (android.os.Build.VERSION.SDK_INT > 9)
-        {
+        if (android.os.Build.VERSION.SDK_INT > 9) {
             StrictMode.ThreadPolicy policy = new
                     StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);

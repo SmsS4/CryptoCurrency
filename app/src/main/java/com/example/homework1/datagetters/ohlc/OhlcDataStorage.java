@@ -23,9 +23,11 @@ public class OhlcDataStorage {
 
     public OhlcDataStorage(File root) {
         directory = new File(root, OHLC_DIR_NAME);
-        if (!Arrays.asList(root.list()).contains(OHLC_DIR_NAME))
-            if (!directory.mkdir())
-                Log.e("Storage", "Could not create OHLC storage directory.");
+        synchronized (storageLock) {
+            if (!Arrays.asList(root.list()).contains(OHLC_DIR_NAME))
+                if (!directory.mkdir())
+                    Log.e("Storage", "Could not create OHLC storage directory.");
+        }
     }
 
     private String getCoinFileAddress(String coin, TimeStart length) {
