@@ -14,7 +14,11 @@ import java.util.List;
 import java.util.Locale;
 
 public class CoinsListAdapter extends RecyclerView.Adapter<CoinsListAdapter.ViewHolder> {
-    List<CryptoData> dataSet;
+    private final List<CryptoData> dataSet;
+
+    public CoinsListAdapter(List<CryptoData> dataSet) {
+        this.dataSet = dataSet;
+    }
 
     @NonNull
     @Override
@@ -50,7 +54,8 @@ public class CoinsListAdapter extends RecyclerView.Adapter<CoinsListAdapter.View
         public void updateFields(CryptoData data) {
             name.setText(data.getName());
             symbol.setText(data.getSymbol());
-            price.setText(String.format(Locale.getDefault(), "Price: %s$", data.getName()));
+            price.setText(String.format(Locale.getDefault(), "Price: %s",
+                    formatPrice(data.getPrice())));
             hourlyDiff.setText(String.format(Locale.getDefault(), "1 Hour: %s",
                     formatDiffPercent(data.getPercentChange1h())));
             dailyDiff.setText(String.format(Locale.getDefault(), "24 Hours: %s",
@@ -63,6 +68,10 @@ public class CoinsListAdapter extends RecyclerView.Adapter<CoinsListAdapter.View
             if (value < 0)
                 return String.format(Locale.getDefault(), "%.2f%%", value);
             return String.format(Locale.getDefault(), "+%.2f%%", value);
+        }
+
+        private String formatPrice(Double value) {
+            return String.format(Locale.getDefault(), "%.2f$", value);
         }
     }
 }
