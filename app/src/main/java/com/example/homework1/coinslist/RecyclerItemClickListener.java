@@ -1,4 +1,4 @@
-package com.example.homework1;
+package com.example.homework1.coinslist;
 
 import android.content.Context;
 import android.view.GestureDetector;

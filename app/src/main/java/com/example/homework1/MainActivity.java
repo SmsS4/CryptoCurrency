@@ -16,6 +16,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.homework1.coinslist.CoinsListAdapter;
+import com.example.homework1.coinslist.RecyclerItemClickListener;
 import com.example.homework1.cryptodata.CryptoData;
 import com.example.homework1.datagetters.cryptolist.CoinsListGetter;
 import com.example.homework1.datagetters.cryptolist.UpdateCoinsListObj;
@@ -173,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
 
         UpdateListHandler(Looper looper, MainActivity target) {
             super(looper);
-            this.target = new WeakReference<MainActivity>(target);
+            this.target = new WeakReference<>(target);
         }
 
         @Override

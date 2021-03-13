@@ -13,7 +13,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.homework1.R;
-import com.example.homework1.TimeStart;
+import com.example.homework1.ohldata.TimeStart;
 import com.example.homework1.datagetters.ohlc.OhlcDataGetter;
 import com.example.homework1.datagetters.ohlc.UpdateOhlcDataObj;
 import com.example.homework1.ohldata.Candle;

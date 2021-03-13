@@ -3,7 +3,7 @@ package com.example.homework1.datagetters.ohlc;
 import android.os.Handler;
 import android.os.Message;
 
-import com.example.homework1.TimeStart;
+import com.example.homework1.ohldata.TimeStart;
 import com.example.homework1.api.CoinIoApi;
 import com.example.homework1.ohlcdraw.OhlcHistoryActivity;
 import com.example.homework1.ohldata.OhlcData;

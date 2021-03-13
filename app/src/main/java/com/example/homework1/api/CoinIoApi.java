@@ -1,8 +1,6 @@
 package com.example.homework1.api;
 
-import com.example.homework1.TimeStart;
-import com.example.homework1.api.ApiService;
-import com.example.homework1.api.RetrofitInstance;
+import com.example.homework1.ohldata.TimeStart;
 import com.example.homework1.exceptions.TooManyRequests;
 import com.example.homework1.ohldata.Candle;
 import com.example.homework1.ohldata.OhlcData;

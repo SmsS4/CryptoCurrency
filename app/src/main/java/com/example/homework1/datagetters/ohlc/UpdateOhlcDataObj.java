@@ -1,6 +1,6 @@
 package com.example.homework1.datagetters.ohlc;
 
-import com.example.homework1.TimeStart;
+import com.example.homework1.ohldata.TimeStart;
 import com.example.homework1.ohldata.OhlcData;
 
 public class UpdateOhlcDataObj {

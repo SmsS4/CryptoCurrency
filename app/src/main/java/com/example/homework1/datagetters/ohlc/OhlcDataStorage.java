@@ -2,7 +2,7 @@ package com.example.homework1.datagetters.ohlc;
 
 import android.util.Log;
 
-import com.example.homework1.TimeStart;
+import com.example.homework1.ohldata.TimeStart;
 import com.example.homework1.ohldata.OhlcData;
 import com.google.gson.Gson;
 
