@@ -1,21 +1,16 @@
 package com.example.homework1.ohlcdraw;
 
-import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.ColorFilter;
 import android.graphics.Paint;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 
 import com.example.homework1.R;
 import com.example.homework1.TimeStart;
@@ -31,7 +26,6 @@ import com.github.mikephil.charting.data.CandleDataSet;
 import com.github.mikephil.charting.data.CandleEntry;
 
 import java.util.ArrayList;
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -53,6 +47,16 @@ public class OhlcHistoryActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private TimeStart timeStartToShow;
     private int requests = 0;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_ohlc_history_activity);
+        setFields();
+        setButtons();
+        setCandleStickChartConfig();
+        setAxisConfig();
+    }
 
     private void requestDone() {
         requests -= 1;
@@ -112,7 +116,6 @@ public class OhlcHistoryActivity extends AppCompatActivity {
 
     }
 
-
     private ArrayList<CandleEntry> getCandles(OhlcData ohlcData) {
         ArrayList<CandleEntry> yValsCandleStick = new ArrayList<>();
         int idx = 0;
@@ -164,15 +167,5 @@ public class OhlcHistoryActivity extends AppCompatActivity {
         set1.setDrawValues(false);
         candleStickChart.setData(new CandleData(set1));
         candleStickChart.invalidate();
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_ohlc_history_aactivity);
-        setFields();
-        setButtons();
-        setCandleStickChartConfig();
-        setAxisConfig();
     }
 }
