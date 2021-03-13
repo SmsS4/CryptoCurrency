@@ -32,7 +32,8 @@ public interface ApiService {
 
     @Headers(
             {
-                    "X-CoinAPI-Key: F0DD8307-88C9-4463-922D-D1FB524B6AA9"
+//                    "X-CoinAPI-Key: F0DD8307-88C9-4463-922D-D1FB524B6AA9"
+                    "X-CoinAPI-Key: D5B79539-7D97-425B-B5D1-A6D32815FF21"
             }
     )
     @GET("https://rest.coinapi.io/v1/ohlcv/{id}/USD/history")

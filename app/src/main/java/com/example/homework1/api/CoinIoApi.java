@@ -40,9 +40,11 @@ public class CoinIoApi {
         );
         Response<List<Candle>> response = call.execute();
         List<Candle> apiResponse = response.body();
-        if (response.code() == 429) {
+        if (response.code() != 200) { //429
+            System.out.println(response.code());
             throw new TooManyRequests();
         }
+        System.out.println("result is readdy");
         return new OhlcData(apiResponse);
     }
 }

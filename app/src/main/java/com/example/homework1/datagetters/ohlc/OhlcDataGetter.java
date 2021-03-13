@@ -3,6 +3,7 @@ package com.example.homework1.datagetters.ohlc;
 import android.os.Handler;
 import android.os.Message;
 
+import com.example.homework1.exceptions.TooManyRequests;
 import com.example.homework1.ohldata.TimeStart;
 import com.example.homework1.api.CoinIoApi;
 import com.example.homework1.ohlcdraw.OhlcHistoryActivity;
@@ -44,9 +45,20 @@ public class OhlcDataGetter implements Runnable {
             ohlcData = CoinIoApi.getOhlcData(coin, length);
             sendMessage(ohlcData, true);
             storage.storeData(coin, length, ohlcData);
+        } catch (TooManyRequests e) {
+            sendTooManyRequests();
         } catch (Exception e) {
+            System.out.println(e.toString());
+            System.out.println(e.getMessage());
+            System.out.println(e.getClass());
             sendNetworkErrorMessage();
         }
+    }
+
+    private void sendTooManyRequests() {
+        Message msg = new Message();
+        msg.what = OhlcHistoryActivity.MESSAGE_NETWORK_ERROR;
+        handler.sendMessage(msg);
     }
 
     private void sendNetworkErrorMessage() {

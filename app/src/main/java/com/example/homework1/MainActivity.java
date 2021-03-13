@@ -50,7 +50,6 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(MainActivity.this, OhlcHistoryActivity.class);
         intent.putExtra("id", coin);
         startActivity(intent);
-        // finish();
     }
 
     @Override

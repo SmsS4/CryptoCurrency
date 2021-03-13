@@ -6,13 +6,19 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.homework1.MainActivity;
 import com.example.homework1.R;
+import com.example.homework1.datagetters.cryptolist.UpdateCoinsListObj;
 import com.example.homework1.ohldata.TimeStart;
 import com.example.homework1.datagetters.ohlc.OhlcDataGetter;
 import com.example.homework1.datagetters.ohlc.UpdateOhlcDataObj;
@@ -25,6 +31,7 @@ import com.github.mikephil.charting.data.CandleData;
 import com.github.mikephil.charting.data.CandleDataSet;
 import com.github.mikephil.charting.data.CandleEntry;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -33,20 +40,80 @@ import java.util.concurrent.TimeUnit;
 public class OhlcHistoryActivity extends AppCompatActivity {
     public static final int MESSAGE_TRANSFER_OHLC_DATA = 1;
     public static final int MESSAGE_NETWORK_ERROR = 2;
+    public static final int MESSAGE_TOO_MANY_REQUESTS = 3;
 
-    /*
-     * Activity to show ohlc chart
-     */
-    private TextView textView;
+    public OnTouchOhlc getOnTouchOhlc() {
+        return onTouchOhlc;
+    }
+
+    public void setOnTouchOhlc(OnTouchOhlc onTouchOhlc) {
+        this.onTouchOhlc = onTouchOhlc;
+    }
+
+    public CandleStickChart getCandleStickChart() {
+        return candleStickChart;
+    }
+
+    public void setCandleStickChart(CandleStickChart candleStickChart) {
+        this.candleStickChart = candleStickChart;
+    }
+
+    public ThreadPoolExecutor getThreadPoolExecutor() {
+        return threadPoolExecutor;
+    }
+
+    public void setThreadPoolExecutor(ThreadPoolExecutor threadPoolExecutor) {
+        this.threadPoolExecutor = threadPoolExecutor;
+    }
+
+    public Handler getHandler() {
+        return handler;
+    }
+
+    public void setHandler(Handler handler) {
+        this.handler = handler;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public ProgressBar getProgressBar() {
+        return progressBar;
+    }
+
+    public void setProgressBar(ProgressBar progressBar) {
+        this.progressBar = progressBar;
+    }
+
+    public void setTimeStartToShow(TimeStart timeStartToShow) {
+        this.timeStartToShow = timeStartToShow;
+    }
+
+    public int getRequests() {
+        return requests;
+    }
+
+    public void setRequests(int requests) {
+        this.requests = requests;
+    }
+
     private OnTouchOhlc onTouchOhlc;
     private CandleStickChart candleStickChart;
-    private LinkedBlockingQueue<Runnable> queue;
     private ThreadPoolExecutor threadPoolExecutor;
     private Handler handler;
     private String id;
     private ProgressBar progressBar;
     private TimeStart timeStartToShow;
     private int requests = 0;
+
+    public TimeStart getTimeStartToShow() {
+        return timeStartToShow;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,51 +127,74 @@ public class OhlcHistoryActivity extends AppCompatActivity {
 
     private void requestDone() {
         requests -= 1;
-        if (requests == 0)
-            progressBar.setVisibility(View.INVISIBLE);
+        if (getRequests() == 0)
+            getProgressBar().setVisibility(View.INVISIBLE);
         else
-            progressBar.setVisibility(View.VISIBLE);
+            getProgressBar().setVisibility(View.VISIBLE);
+    }
+
+    private static class UpdateListHandler extends Handler {
+        private final WeakReference<OhlcHistoryActivity> target;
+
+        UpdateListHandler(Looper looper, OhlcHistoryActivity target) {
+            super(looper);
+            this.target = new WeakReference<>(target);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            OhlcHistoryActivity target = this.target.get();
+            switch (msg.what) {
+                case OhlcHistoryActivity.MESSAGE_TRANSFER_OHLC_DATA:
+                    UpdateOhlcDataObj updateOhlcDataObj = ((UpdateOhlcDataObj) msg.obj);
+                    OhlcData ohlcData = updateOhlcDataObj.getData();
+                    if (updateOhlcDataObj.isFresh()) {
+                        target.requestDone();
+                    }
+                    if (updateOhlcDataObj.getLength() != target.getTimeStartToShow())
+                        /// ignore old data
+                        return;
+                    target.setCandleDataSet(target.getCandles(ohlcData));
+                    break;
+                case OhlcHistoryActivity.MESSAGE_NETWORK_ERROR:
+                    target.requestDone();
+                    target.toast("Network error");
+                    break;
+                case OhlcHistoryActivity.MESSAGE_TOO_MANY_REQUESTS:
+                    target.requestDone();
+                    target.toast("Too many requests");
+                    break;
+            }
+        }
     }
 
     private void setFields() {
-        progressBar = findViewById(R.id.progressBar);
-        progressBar.setVisibility(View.INVISIBLE);
-        id = getIntent().getStringExtra("id");
-        textView = findViewById(R.id.textView);
-        onTouchOhlc = new OnTouchOhlc(textView);
-        candleStickChart = findViewById(R.id.candle_stick_chart);
-        queue = new LinkedBlockingQueue<>();
-        threadPoolExecutor = new ThreadPoolExecutor(
+        setProgressBar(findViewById(R.id.progressBar));
+        getProgressBar().setVisibility(View.INVISIBLE);
+        setId(getIntent().getStringExtra("id"));
+        /*
+         * Activity to show ohlc chart
+         */
+        TextView textView = findViewById(R.id.textView);
+        setOnTouchOhlc(new OnTouchOhlc(textView));
+        setCandleStickChart(findViewById(R.id.candle_stick_chart));
+        LinkedBlockingQueue<Runnable> queue = new LinkedBlockingQueue<>();
+        setThreadPoolExecutor(new ThreadPoolExecutor(
                 0, 2, 15, TimeUnit.MINUTES, queue
-        );
-        handler = new Handler(Looper.getMainLooper()) {
-            public void handleMessage(Message msg) {
-                switch (msg.what) {
-                    case OhlcHistoryActivity.MESSAGE_TRANSFER_OHLC_DATA:
-                        UpdateOhlcDataObj updateOhlcDataObj = ((UpdateOhlcDataObj) msg.obj);
-                        OhlcData ohlcData = updateOhlcDataObj.getData();
-
-                        if (updateOhlcDataObj.isFresh()) {
-                            requestDone();
-                        }
-
-                        if (updateOhlcDataObj.getLength() != timeStartToShow)
-                            /// ignore old data
-                            return;
-                        setCandleDataSet(getCandles(ohlcData));
-                        break;
-
-                }
-            }
-        };
+        ));
+        setHandler(new OhlcHistoryActivity.UpdateListHandler(Looper.getMainLooper(), this));
 
     }
 
+    private void toast(String message) {
+        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+    }
+
     private void getData(TimeStart timeStart) {
-        timeStartToShow = timeStart;
+        setTimeStartToShow(timeStart);
         requests += 1;
-        progressBar.setVisibility(View.VISIBLE);
-        threadPoolExecutor.execute(new OhlcDataGetter(handler, id, timeStart, getFilesDir()));
+        getProgressBar().setVisibility(View.VISIBLE);
+        getThreadPoolExecutor().execute(new OhlcDataGetter(getHandler(), getId(), timeStart, getFilesDir()));
     }
 
     private void setButtons() {
@@ -127,6 +217,7 @@ public class OhlcHistoryActivity extends AppCompatActivity {
     }
 
     private void setCandleStickChartConfig() {
+        CandleStickChart candleStickChart = getCandleStickChart();
         candleStickChart.setHighlightPerDragEnabled(true);
         candleStickChart.setDrawBorders(true);
         candleStickChart.setTouchEnabled(true);
@@ -139,6 +230,7 @@ public class OhlcHistoryActivity extends AppCompatActivity {
     }
 
     private void setAxisConfig() {
+        CandleStickChart candleStickChart = getCandleStickChart();
         YAxis yAxis = candleStickChart.getAxisLeft();
         YAxis rightAxis = candleStickChart.getAxisRight();
         yAxis.setDrawGridLines(false);
@@ -165,6 +257,7 @@ public class OhlcHistoryActivity extends AppCompatActivity {
         set1.setIncreasingPaintStyle(Paint.Style.FILL);
         set1.setNeutralColor(Color.BLUE);
         set1.setDrawValues(false);
+        CandleStickChart candleStickChart = getCandleStickChart();
         candleStickChart.setData(new CandleData(set1));
         candleStickChart.invalidate();
     }
