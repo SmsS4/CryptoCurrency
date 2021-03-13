@@ -37,7 +37,7 @@ public class CoinsListGetter implements Runnable {
             sendMessage(cryptoList, true);
             writeToStorage(cryptoList);
         } catch (Exception e) {
-            /// network/too many requests error
+            sendNetworkErrorMessage();
         }
     }
 
@@ -54,6 +54,12 @@ public class CoinsListGetter implements Runnable {
     private void writeToStorage(List<CryptoData> cryptoList) {
         for (int idx = 0; idx < cryptoList.size(); idx++)
             storage.storeData(startIdx + idx, cryptoList.get(idx));
+    }
+
+    private void sendNetworkErrorMessage() {
+        Message msg = new Message();
+        msg.what = MainActivity.MESSAGE_NETWORK_ERROR;
+        handler.handleMessage(msg);
     }
 
     private void sendMessage(List<CryptoData> data, boolean fresh) {

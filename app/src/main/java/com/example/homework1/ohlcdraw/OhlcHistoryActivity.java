@@ -38,6 +38,7 @@ import java.util.concurrent.TimeUnit;
 
 public class OhlcHistoryActivity extends AppCompatActivity {
     public static final int MESSAGE_TRANSFER_OHLC_DATA = 1;
+    public static final int MESSAGE_NETWORK_ERROR = 2;
 
     /*
      * Activity to show ohlc chart

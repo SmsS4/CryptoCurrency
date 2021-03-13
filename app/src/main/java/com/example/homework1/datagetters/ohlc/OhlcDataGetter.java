@@ -41,9 +41,14 @@ public class OhlcDataGetter implements Runnable {
             sendMessage(ohlcData, true);
             storage.storeData(coin, length, ohlcData);
         }catch (Exception e) {
-            System.out.println("neterr");
-            /// network error
+            sendNetworkErrorMessage();
         }
+    }
+
+    private void sendNetworkErrorMessage() {
+        Message msg = new Message();
+        msg.what = OhlcHistoryActivity.MESSAGE_NETWORK_ERROR;
+        handler.handleMessage(msg);
     }
 
     /**

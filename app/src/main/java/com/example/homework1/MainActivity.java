@@ -20,6 +20,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     public static final int MESSAGE_UPDATE_ROW = 1;
+    public static final int MESSAGE_NETWORK_ERROR = 2;
 
     private List<CryptoData> coinsList;
     private RecyclerView coinsListView;
@@ -58,7 +59,12 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        coinsListView = (RecyclerView) findViewById(R.id.coins_list_recycler_view);
+
+        initCoinsListView();
+    }
+
+    private void initCoinsListView() {
+        coinsListView = findViewById(R.id.coins_list_recycler_view);
         coinsListLayoutManager = new LinearLayoutManager(this);
         coinsListView.setLayoutManager(coinsListLayoutManager);
 
