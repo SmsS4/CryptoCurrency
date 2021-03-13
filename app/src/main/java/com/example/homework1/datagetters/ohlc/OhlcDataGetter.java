@@ -34,8 +34,12 @@ public class OhlcDataGetter implements Runnable {
      */
     public void run() {
         OhlcData ohlcData = storage.loadData(coin, length);
-        if (ohlcData != null)
-            sendMessage(ohlcData, false);
+        if (ohlcData != null) {
+            boolean isFresh = storage.isFresh(coin, length);
+            sendMessage(ohlcData, isFresh);
+            if (isFresh)
+                return;
+        }
         try {
             ohlcData = CoinIoApi.getOhlcData(coin, length);
             sendMessage(ohlcData, true);

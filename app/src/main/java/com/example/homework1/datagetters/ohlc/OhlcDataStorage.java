@@ -14,9 +14,11 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Date;
 
 public class OhlcDataStorage {
     private static final String OHLC_DIR_NAME = "ohlc";
+    private static final long FRESH_TIME_THRESHOLD = (long) (0.25 * 60 * 60 * 1000);
     private static final Object storageLock = new Object();
 
     private final File directory;
@@ -52,6 +54,12 @@ public class OhlcDataStorage {
     private boolean hasData(String coin, TimeStart length) {
         File file = new File(getCoinFileAddress(coin, length));
         return file.exists();
+    }
+
+    public boolean isFresh(String coin, TimeStart length) {
+        File file = new File(getCoinFileAddress(coin, length));
+        Date now = new Date();
+        return now.getTime() - file.lastModified() <= FRESH_TIME_THRESHOLD;
     }
 
     public OhlcData loadData(String coin, TimeStart length) {
