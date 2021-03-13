@@ -20,9 +20,9 @@ public class CoinIoApi {
         Calendar cal = Calendar.getInstance();
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         if (timeStart == TimeStart.MONTH)
-            cal.add(Calendar.DATE, -30);
+            cal.add(Calendar.DATE, -29);
         else
-            cal.add(Calendar.DATE, -7);
+            cal.add(Calendar.DATE, -6);
         return dateFormat.format(cal.getTime());
     }
 
@@ -44,7 +44,7 @@ public class CoinIoApi {
             System.out.println(response.code());
             throw new TooManyRequests();
         }
-        System.out.println("result is readdy");
+        System.out.println("result is ready");
         return new OhlcData(apiResponse);
     }
 }

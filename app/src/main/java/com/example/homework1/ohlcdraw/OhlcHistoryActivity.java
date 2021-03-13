@@ -30,6 +30,7 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.CandleData;
 import com.github.mikephil.charting.data.CandleDataSet;
 import com.github.mikephil.charting.data.CandleEntry;
+import com.github.mikephil.charting.formatter.ValueFormatter;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -208,7 +209,7 @@ public class OhlcHistoryActivity extends AppCompatActivity {
 
     private ArrayList<CandleEntry> getCandles(OhlcData ohlcData) {
         ArrayList<CandleEntry> yValsCandleStick = new ArrayList<>();
-        int idx = 0;
+        int idx = 1;
         for (Candle candle : ohlcData.getCandles()) {
             yValsCandleStick.add(new CryptoCandleEntry(idx, candle.getPriceHigh(), candle.getPriceLow(), candle.getPriceOpen(), candle.getPriceClose()));
             idx += 1;
@@ -237,15 +238,19 @@ public class OhlcHistoryActivity extends AppCompatActivity {
         rightAxis.setDrawGridLines(false);
         XAxis xAxis = candleStickChart.getXAxis();
         xAxis.setDrawGridLines(false);// disable x axis grid lines
-        xAxis.setDrawLabels(false);
         rightAxis.setTextColor(Color.BLACK);
         yAxis.setDrawLabels(false);
         xAxis.setGranularity(1f);
         xAxis.setGranularityEnabled(true);
         xAxis.setAvoidFirstLastClipping(true);
+        xAxis.setDrawLabels(true);
     }
 
     private void setCandleDataSet(ArrayList<CandleEntry> candles) {
+        if (candles.isEmpty()) {
+            toast("There is no candle to show :(");
+            return;
+        }
         CandleDataSet set1 = new CandleDataSet(candles, "DataSet 1");
         set1.setAxisDependency(YAxis.AxisDependency.LEFT);
         set1.setColor(Color.rgb(80, 80, 80));
