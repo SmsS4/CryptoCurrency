@@ -9,6 +9,7 @@ import android.os.Message;
 import android.os.StrictMode;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -40,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private Handler handler;
     private ProgressBar progressBar;
 
-    protected void ShowOhlcChart(String coin) {
+    protected void showOhlcChart(String coin) {
         /*
          Change activity to OhlcChart
          */
@@ -111,16 +112,22 @@ public class MainActivity extends AppCompatActivity {
                         new RecyclerItemClickListener.OnItemClickListener() {
                             @Override
                             public void onItemClick(View view, int position) {
-                                ShowOhlcChart(coinsList.get(position).getSymbol());
+                                showOhlcChart(coinsList.get(position).getSymbol());
                             }
 
                             @Override
                             public void onLongItemClick(View view, int position) {
-                                ShowOhlcChart(coinsList.get(position).getSymbol());
+                                showOhlcChart(coinsList.get(position).getSymbol());
                             }
                         }
                 )
         );
+    }
+
+    private void showNetworkErrorMessage() {
+        final String errorMsg = "Network error, check connection!";
+        Toast toast = Toast.makeText(this, errorMsg, Toast.LENGTH_SHORT);
+        toast.show();
     }
 
     private void reloadCoins() {
@@ -142,6 +149,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void requestDone(boolean success) {
+        if (!success)
+            showNetworkErrorMessage();
         progressBar.setVisibility(View.INVISIBLE);
         requestPending = false;
     }
