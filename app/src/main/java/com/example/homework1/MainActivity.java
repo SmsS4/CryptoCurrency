@@ -35,7 +35,6 @@ public class MainActivity extends AppCompatActivity {
     ThreadPoolExecutor threadPoolExecutor;
     private List<CryptoData> coinsList;
     private RecyclerView coinsListView;
-    private RecyclerView.LayoutManager coinsListLayoutManager;
     private CoinsListAdapter coinsListAdapter;
     private boolean requestPending = false;
     private Handler handler;
@@ -87,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
     private void initCoinsListView() {
         coinsList = new ArrayList<>();
         coinsListView = findViewById(R.id.coins_list_recycler_view);
-        coinsListLayoutManager = new LinearLayoutManager(this);
+        RecyclerView.LayoutManager coinsListLayoutManager = new LinearLayoutManager(this);
         coinsListView.setLayoutManager(coinsListLayoutManager);
 
         coinsListAdapter = new CoinsListAdapter(coinsList, getFilesDir());
@@ -95,10 +94,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initListeners() {
-        FloatingActionButton btn = findViewById(R.id.extend_list_button);
-        btn.setOnClickListener(v -> {
+        FloatingActionButton loadMoreBtn = findViewById(R.id.extend_list_button);
+        loadMoreBtn.setOnClickListener(v -> {
             if (!requestPending)
                 loadMoreCoins(10);
+        });
+
+        FloatingActionButton refreshListBtn = findViewById(R.id.refresh_list_button);
+        refreshListBtn.setOnClickListener(v -> {
+            if (!requestPending)
+                reloadCoins();
         });
 
         coinsListView.addOnItemTouchListener(
@@ -116,6 +121,13 @@ public class MainActivity extends AppCompatActivity {
                         }
                 )
         );
+    }
+
+    private void reloadCoins() {
+        requestStart();
+        int start = 1;
+        int limit = coinsList.size();
+        threadPoolExecutor.execute(new CoinsListGetter(handler, start, limit, getFilesDir()));
     }
 
     private void loadMoreCoins(int limit) {
