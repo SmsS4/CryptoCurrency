@@ -4,14 +4,18 @@ import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.homework1.api.CoinMarketCapApi;
 import com.example.homework1.cryptodata.CryptoData;
 import com.example.homework1.ohlcdraw.OhlcHistoryActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -48,20 +52,33 @@ public class MainActivity extends AppCompatActivity {
                 new String[]{Manifest.permission.INTERNET},
                 1);
 
-//        coinsList = new ArrayList<>();
-//        try {
-//            coinsList = CoinMarketCapApi.getData(1, 10);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        coinsListView = (RecyclerView) findViewById(R.id.coins_list_recycler_view);
-//        coinsListLayoutManager = new LinearLayoutManager(this);
-//        coinsListView.setLayoutManager(coinsListLayoutManager);
-//
-//        coinsListAdapter = new CoinsListAdapter(coinsList, getFilesDir());
-//        coinsListView.setAdapter(coinsListAdapter);
+        coinsList = new ArrayList<>();
+        try {
+            coinsList = CoinMarketCapApi.getData(1, 10);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        coinsListView = (RecyclerView) findViewById(R.id.coins_list_recycler_view);
+        coinsListLayoutManager = new LinearLayoutManager(this);
+        coinsListView.setLayoutManager(coinsListLayoutManager);
 
-//        OhlcData d = CoinIoApi.getOhlcData("BTC", TimeStart.MONTH);
-        ShowOhlcChart("BTC");
+        coinsListAdapter = new CoinsListAdapter(coinsList, getFilesDir());
+        coinsListView.setAdapter(coinsListAdapter);
+
+        coinsListView.addOnItemTouchListener(
+                new RecyclerItemClickListener(this, coinsListView,
+                        new RecyclerItemClickListener.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(View view, int position) {
+                                ShowOhlcChart(coinsList.get(position).getSymbol());
+                            }
+
+                            @Override
+                            public void onLongItemClick(View view, int position) {
+                                ShowOhlcChart(coinsList.get(position).getSymbol());
+                            }
+                        }
+                )
+        );
     }
 }
