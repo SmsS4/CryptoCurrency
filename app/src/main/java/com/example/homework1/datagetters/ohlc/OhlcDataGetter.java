@@ -36,11 +36,11 @@ public class OhlcDataGetter implements Runnable {
         OhlcData ohlcData = storage.loadData(coin, length);
         if (ohlcData != null)
             sendMessage(ohlcData, false);
-        try{
+        try {
             ohlcData = CoinIoApi.getOhlcData(coin, length);
             sendMessage(ohlcData, true);
             storage.storeData(coin, length, ohlcData);
-        }catch (Exception e) {
+        } catch (Exception e) {
             sendNetworkErrorMessage();
         }
     }
@@ -48,7 +48,7 @@ public class OhlcDataGetter implements Runnable {
     private void sendNetworkErrorMessage() {
         Message msg = new Message();
         msg.what = OhlcHistoryActivity.MESSAGE_NETWORK_ERROR;
-        handler.handleMessage(msg);
+        handler.sendMessage(msg);
     }
 
     /**
@@ -61,6 +61,6 @@ public class OhlcDataGetter implements Runnable {
         Message msg = new Message();
         msg.what = OhlcHistoryActivity.MESSAGE_TRANSFER_OHLC_DATA;
         msg.obj = new UpdateOhlcDataObj(coin, length, data, fresh);
-        handler.handleMessage(msg);
+        handler.sendMessage(msg);
     }
 }

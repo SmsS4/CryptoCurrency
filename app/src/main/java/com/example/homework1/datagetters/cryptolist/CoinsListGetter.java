@@ -17,7 +17,7 @@ public class CoinsListGetter implements Runnable {
     private final CoinsListStorage storage;
     private final CoinAvatarsStorage avatarsStorage;
 
-    CoinsListGetter(Handler handler, int start, int limit, File filesDir) {
+    public CoinsListGetter(Handler handler, int start, int limit, File filesDir) {
         this.handler = handler;
         this.startIdx = start;
         this.limit = limit;
@@ -37,6 +37,7 @@ public class CoinsListGetter implements Runnable {
             sendMessage(cryptoList, true);
             writeToStorage(cryptoList);
         } catch (Exception e) {
+            e.printStackTrace();
             sendNetworkErrorMessage();
         }
     }
@@ -59,13 +60,13 @@ public class CoinsListGetter implements Runnable {
     private void sendNetworkErrorMessage() {
         Message msg = new Message();
         msg.what = MainActivity.MESSAGE_NETWORK_ERROR;
-        handler.handleMessage(msg);
+        handler.sendMessage(msg);
     }
 
     private void sendMessage(List<CryptoData> data, boolean fresh) {
         Message msg = new Message();
         msg.what = MainActivity.MESSAGE_UPDATE_ROW;
-        msg.obj = new UpdateCoinsListObj(data, this.startIdx, this.limit, true);
-        handler.handleMessage(msg);
+        msg.obj = new UpdateCoinsListObj(data, this.startIdx, this.limit, fresh);
+        handler.sendMessage(msg);
     }
 }
