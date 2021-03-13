@@ -9,34 +9,28 @@
     tools:context=".ohlcdraw.OhlcHistoryActivity">
 
 
-
     <com.github.mikephil.charting.charts.CandleStickChart
         android:id="@+id/candle_stick_chart"
         android:layout_width="352dp"
         android:layout_height="437dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.497" />
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <Button
         android:id="@+id/back_button_ohlc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Back"
+        android:text="@string/back"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.092"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.923" />
+        app:layout_constraintStart_toStartOf="@+id/candle_stick_chart"
+        app:layout_constraintTop_toBottomOf="@+id/progressBar" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Touch candles to show OHLC values"
+        android:text="@string/touch_candles_tip"
         android:textColor="#000000"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -49,45 +43,37 @@
         android:id="@+id/days_7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="WEEK"
+        android:text="@string/week"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.923" />
+        app:layout_constraintEnd_toStartOf="@+id/days_30"
+        app:layout_constraintStart_toEndOf="@+id/back_button_ohlc"
+        app:layout_constraintTop_toBottomOf="@+id/progressBar" />
+
 
     <Button
         android:id="@+id/days_30"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Month"
+        android:text="@string/month"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.908"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.923" />
-
+        app:layout_constraintEnd_toEndOf="@+id/candle_stick_chart"
+        app:layout_constraintTop_toBottomOf="@+id/progressBar" />
 
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="350dp"
         android:layout_height="19dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginVertical="30dp"
         android:background="#FFFFFF"
         android:indeterminate="true"
         android:max="100"
         android:progress="33"
         android:theme="@style/progressColor"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.524"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-
-        app:layout_constraintVertical_bias="0.84" />
+        app:layout_constraintTop_toBottomOf="@+id/candle_stick_chart" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
